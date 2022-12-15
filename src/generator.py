@@ -58,8 +58,3 @@ class PasswordGenerator:
             password += chars[index]
 
         return password
-
-chars = "abcdefghijklmnopqrstuvwxyz0123456789"
-gen = PasswordGenerator()
-password = gen.generate_password(length=10, chars=chars)
-print(password)

@@ -4,6 +4,9 @@ from functools import wraps
 import jwt
 import logging
 
+from generator import *
+gen = PasswordGenerator()
+chars = ''
 
 app = Flask(__name__)
 
@@ -16,7 +19,7 @@ logging.basicConfig(
     datefmt='%d-%b-%y %H:%M:%S'
 )
 
-
+'''
 class AuthError(Exception):
     def __init__(self, error, status_code):
         self.error = error
@@ -72,9 +75,10 @@ def token_required(f):
         return f(current_user, *args, **kwargs)
 
     return decorator
-
+'''
 
 @app.route('/')
+@cross_origin()
 def index():
     try:
         return jsonify({
@@ -83,6 +87,33 @@ def index():
     except Exception:
         abort(400)
 
+@app.route('/alpha')
+@cross_origin()
+def alpha():
+
+    body = request.get_json()
+    length = int(body.get("length"))
+
+    chars = gen.lower_char + gen.upper_char
+    password = gen.generate_password(length, chars=chars)
+    return jsonify({
+        'success': True,
+        'password': password
+    })
+
+@app.route('/alphanumeric')
+@cross_origin()
+def alphanumeric():
+
+    body = request.get_json()
+    length = int(body.get("length"))
+
+    chars = gen.lower_char + gen.upper_char + gen.numbers
+    password = gen.generate_password(length, chars=chars)
+    return jsonify({
+        'success': True,
+        'password': password
+    })
 
 @app.errorhandler(400)
 @cross_origin()

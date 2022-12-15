@@ -95,7 +95,7 @@ def alpha():
     length = int(body.get("length"))
 
     chars = gen.lower_char + gen.upper_char
-    password = gen.generate_password(length, chars=chars)
+    password = gen.generate_password(length, chars)
     return jsonify({
         'success': True,
         'password': password
@@ -109,7 +109,30 @@ def alphanumeric():
     length = int(body.get("length"))
 
     chars = gen.lower_char + gen.upper_char + gen.numbers
-    password = gen.generate_password(length, chars=chars)
+    i_pass = gen.generate_password(length, chars)
+
+    for i in gen.numbers:
+        if i in i_pass:
+            return i_pass
+        else:
+            alphanumeric()
+        return i_pass
+    password = i_pass
+    
+    return jsonify({
+        'success': True,
+        'password': password
+    })
+
+@app.route('/alphanumx')
+@cross_origin()
+def alphanumx():
+
+    body = request.get_json()
+    length = int(body.get("length"))
+
+    chars = gen.lower_char + gen.upper_char + gen.numbers + gen.special_char
+    password = gen.generate_password(length, chars)
     return jsonify({
         'success': True,
         'password': password

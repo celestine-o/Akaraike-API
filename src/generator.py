@@ -1,21 +1,21 @@
 import random
 
 
-class Password:
+class PasswordGenerator:
 
-    numbers = [0,1,2,3,4,5,6,7,8,9]
+    # String of numbers
+    numbers = '0123456789'
 
-    special = ['!','@','#','$','%','&','*','(',')','_','-','+','=','|','?','/']
+    # string of special characters
+    special_char = '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
 
-    lower_char = [
-        'a','b','c','d','e','f','g','h','i','j','k','l','m',
-        'n','o','p','q','r','s','t','u','v','w','x','y','z'
-    ]
+    # String of uppercase characters
+    lower_char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-    upper_char = [
-        'A','B','C','D','E','F','G','H','I','J','K','L','M',
-        'N','O','P','Q','R','S','T','U','V','W','X','Y','Z'
-    ]
+    # String of lowercase characters
+    upper_char = 'abcdefghijklmnopqrstuvwxyz'
+
+
     strength = 0
     def length_strength(self, len_pass):
         len_pass = 0
@@ -44,27 +44,22 @@ class Password:
         for char in self.special:
             if char in password == True:
                 char_type_count += 1
-        return 
+        return char_type_count
 
-    def generate_password(self):
-        """
-        Performs the computation that genarates a
-        password
-        """
-
+    def generate_password(self, length, chars):
         password = ""
-        while True:
-            for x in range(self.charset_length):
-                x = randint(0, (self.charset.__len__() - 1))
-                password += self.charset[x]
-            return password
 
-    def combine(self, *args):
-        return upper_char + lower_char
+        for _ in range(length):
+            # Generate a random index between 0 and the length of chars
+            index = random.randint(0, len(chars) - 1)
 
+            # Retrieve a random character from chars using the generated index and
+            # append it to password
+            password += chars[index]
 
-p = Password()
-print(p.length_strength(12))
+        return password
 
-print(p.combine(upper_char, lower_char))
-print("password", p.gen(12, password=[]))
+chars = "abcdefghijklmnopqrstuvwxyz0123456789"
+gen = PasswordGenerator()
+password = gen.generate_password(length=10, chars=chars)
+print(password)

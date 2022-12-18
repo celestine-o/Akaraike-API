@@ -1,4 +1,5 @@
 import random
+from collections import Counter
 
 
 class PasswordGenerator:
@@ -58,3 +59,13 @@ class PasswordGenerator:
             password += chars[index]
 
         return password
+    
+    # Not used as maximum recursion depth is always exceeded
+    def check_password(self, string1, string2, word):
+        for letter in string1:
+            if letter not in word:
+                return False
+        for letter in string2:
+            if letter not in word:
+                return False
+        return True

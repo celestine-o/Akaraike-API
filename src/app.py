@@ -15,7 +15,7 @@ app.config['SECRET_KEY'] = '$Celestine$'
 CORS(app, resources={r"*/api/*": {"origins": "*"}})
 
 logging.basicConfig(
-    filename='app.log', filemode='a', format='%(levelname)s in %(module)s: %(message)s', 
+    filename='app.log', filemode='w', format='%(levelname)s in %(module)s: %(message)s', 
     datefmt='%d-%b-%y %H:%M:%S'
 )
 
@@ -96,9 +96,11 @@ def alphabet():
 
     chars = gen.lower_char + gen.upper_char
     password = gen.generate_password(length, chars)
+    strength = gen.check_password_strength(password)
     return jsonify({
         'success': True,
-        'password': password
+        'password': password,
+        'strength': strength
     })
 
 @app.route('/alphanumeric')
@@ -119,9 +121,11 @@ def alphanumeric():
         return i_pass
     password = i_pass
 
+    strength = gen.check_password_strength(password)
     return jsonify({
         'success': True,
-        'password': password
+        'password': password,
+        'strength': strength
     })
 
 @app.route('/alphanumx')
@@ -146,12 +150,12 @@ def alphanumx():
         else:
             alphanumx()
         return i_pass
-    
 
-
+    strength = gen.check_password_strength(i_pass)
     return jsonify({
         'success': True,
-        'password': password
+        'password': i_pass,
+        'strength': strength
     })
 
 @app.errorhandler(400)

@@ -1,6 +1,5 @@
 import random
-from collections import Counter
-
+import re
 
 class PasswordGenerator:
 
@@ -15,37 +14,7 @@ class PasswordGenerator:
 
     # String of lowercase characters
     upper_char = 'abcdefghijklmnopqrstuvwxyz'
-
-
-    strength = 0
-    def length_strength(self, len_pass):
-        len_pass = 0
-        len_strength = 0
-        
-        match [len_pass > 8, len_pass > 12]:
-            case [True, True]:
-                len_strength = 3
-            case [True, False]:
-                len_strength = 2
-            case [False, False]:
-                len_strength = 3
-        return len_strength
-
-    def char_strength(self, password):
-        char_type_count = 0
-        for char in self.upper_char:
-            if char in password == True:
-                char_type_count += 1
-        for char in self.slower_char:
-            if char in password == True:
-                char_type_count += 1
-        for char in self.numbers:
-            if char in password == True:
-                char_type_count += 1
-        for char in self.special:
-            if char in password == True:
-                char_type_count += 1
-        return char_type_count
+    
 
     def generate_password(self, length, chars):
         password = ""
@@ -61,7 +30,8 @@ class PasswordGenerator:
         return password
     
     # Not used as maximum recursion depth is always exceeded
-    def check_password(self, string1, string2, word):
+    # Intended to check if password contains different character types
+    def check_char(self, string1, string2, word):
         for letter in string1:
             if letter not in word:
                 return False
@@ -69,3 +39,20 @@ class PasswordGenerator:
             if letter not in word:
                 return False
         return True
+    
+    def check_password_strength(self, password):
+        strength = 0
+        if len(password) > 8:
+            strength += 1
+        if re.search("[a-z]", password):
+            strength += 1
+        if re.search("[A-Z]", password):
+            strength += 1
+        if re.search("[0-9]", password):
+            strength += 1
+        if re.search("[!@#$%^&*()_+-=[]{}|;':\",./<>?]", password):
+            strength += 1
+        return strength
+
+gen = PasswordGenerator()
+

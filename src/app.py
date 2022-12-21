@@ -5,7 +5,6 @@ import jwt
 import logging
 
 from generator import *
-gen = PasswordGenerator()
 chars = ''
 
 app = Flask(__name__)
@@ -94,9 +93,8 @@ def alphabet():
     body = request.get_json()
     length = int(body.get("length"))
 
-    chars = gen.lower_char + gen.upper_char
-    password = gen.generate_password(length, chars)
-    strength = gen.check_password_strength(password)
+    password = generate(length, lower_char, upper_char)
+    strength = check_password_strength(password)
     return jsonify({
         'success': True,
         'password': password,
@@ -110,20 +108,12 @@ def alphanumeric():
     body = request.get_json()
     length = int(body.get("length"))
 
-    chars = gen.lower_char + gen.upper_char + gen.numbers
-    i_pass = gen.generate_password(length, chars)
-
-    for i in gen.numbers:
-        if i in i_pass:
-            return i_pass
-        else:
-            alphanumeric()
-        return i_pass
-    password = i_pass
-
+    password = generate(length, upper_char, lower_char, numbers)
+    strength = check_password_strength(password)
     return jsonify({
         'success': True,
-        'password': password
+        'password': password,
+        'strength': strength
     })
 
 @app.route('/alphanumx')
@@ -133,27 +123,12 @@ def alphanumx():
     body = request.get_json()
     length = int(body.get("length"))
     
-    chars = gen.lower_char + gen.upper_char + gen.numbers + gen.special_char
-    i_pass = gen.generate_password(length, chars)
-
-    for i in gen.numbers:
-        if i in i_pass:
-            return i_pass
-        else:
-            alphanumx()
-        return i_pass
-    for i in gen.special_char:
-        if i in i_pass:
-            return i_pass
-        else:
-            alphanumx()
-        return i_pass
-    
-
-
+    password = generate(length, upper_char, lower_char, numbers, special_char)
+    strength = check_password_strength(password)
     return jsonify({
         'success': True,
-        'password': password
+        'password': password,
+        'strength': strength
     })
 
 @app.errorhandler(400)

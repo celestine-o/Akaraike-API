@@ -56,3 +56,29 @@ class PasswordGenerator:
 
 gen = PasswordGenerator()
 
+def make_random(length, *args):
+    # final lenght of character type
+    len_char_type = 0
+    # Total number of character types
+    total_args = len(args)
+    # the average length to be selected for each character type
+    char_len = length / total_args
+    password = ''
+    pw =''
+
+    for arg in args:
+        len_char_type = (
+            (length / total_args) * 2 if char_len <= 5 else length / total_args
+        )
+        for _ in range(int(len_char_type)):
+            index = random.randint(0, len(arg) - 1)
+            pw += arg[index]
+    print(pw)
+    for _ in range(length):
+        index = random.randint(0, len(pw) -1)
+        password += pw[index]
+    print(password)
+    return password
+
+
+make_random(10, 'sdxcvbnmfghj', '1234567890', 'SDFGBJFDWEFF', '!@#$%^&*()_+=-')  

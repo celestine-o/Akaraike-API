@@ -132,7 +132,7 @@ def register():
     except Exception:
         abort(400)
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['POST'])
 @cross_origin()
 def login():
     '''
@@ -169,6 +169,7 @@ def login():
 
 @app.route('/alpha')
 @cross_origin()
+@token_required
 def alphabet():
 
     body = request.get_json()
@@ -184,6 +185,7 @@ def alphabet():
 
 @app.route('/alphanumeric')
 @cross_origin()
+@token_required
 def alphanumeric():
 
     body = request.get_json()
@@ -199,6 +201,7 @@ def alphanumeric():
 
 @app.route('/alphanumx')
 @cross_origin()
+@token_required
 def alphanumx():
 
     body = request.get_json()

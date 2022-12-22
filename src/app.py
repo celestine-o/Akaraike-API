@@ -1,24 +1,31 @@
 from flask import Flask, abort, jsonify, request, make_response
 from flask_cors import CORS, cross_origin
 from functools import wraps
+from flask_migrate import Migrate
 import jwt
 import logging
-
+from flask_bcrypt import Bcrypt, generate_password_hash, check_password_hash
+from datetime import datetime, timezone, timedelta
+from database.models import  User, db_drop_and_create_all, setup_db, db
 from generator import *
-chars = ''
 
 app = Flask(__name__)
-
-app.config['SECRET_KEY'] = '$Celestine$'
-
+setup_db(app)
+app.config['SECRET_KEY'] = '*7f8A5+)-8@54$>t+t>t73?5jUc32+I8BB*i8-fi52a2StjitI'
+bcrypt = Bcrypt(app)
 CORS(app, resources={r"*/api/*": {"origins": "*"}})
+migrate = Migrate(app, db)
 
 logging.basicConfig(
     filename='app.log', filemode='a', format='%(levelname)s in %(module)s: %(message)s', 
     datefmt='%d-%b-%y %H:%M:%S'
 )
 
-'''
+current_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
+# with app.app_context():
+#   db_drop_and_create_all()
+
 class AuthError(Exception):
     def __init__(self, error, status_code):
         self.error = error
@@ -74,7 +81,6 @@ def token_required(f):
         return f(current_user, *args, **kwargs)
 
     return decorator
-'''
 
 @app.route('/')
 @cross_origin()
@@ -85,6 +91,81 @@ def index():
         })
     except Exception:
         abort(400)
+
+@app.route('/register', methods=['POST'])
+@cross_origin()
+def register():
+    '''
+    Used to register a new account, expected input should come in this format \n
+    {
+        "email": "test005@test.com",
+        "username": "Bee5",
+        "password": "test5"
+    }
+    '''
+    body = request.get_json()
+    # # Get user info
+    email = body.get("email")
+    username = body.get("username")
+    password = body.get("password")
+
+    # New user's details are saved to the database
+    try:
+        new_user = User(
+            email=email,
+            username=username,
+            password=generate_password_hash(password, 10),
+            public_id=str(generate_password(30, lower_char, numbers)),
+            date_created=current_time,
+        )
+        if user := User.query.filter_by(username=username).first():
+            return jsonify({
+                "message": "Username already exist"
+            })
+        elif user := User.query.filter_by(email=email).first():
+            return jsonify({
+                "message": "Email already exist"
+            })
+        new_user.insert()
+
+        return jsonify({"success": True, "message": f"{username} created"})
+    except Exception:
+        abort(400)
+
+@app.route('/login', methods=['GET', 'POST'])
+@cross_origin()
+def login():
+    '''
+    Used to login user, expected input should come in this the format \n
+    {
+    "username": "Bee5",
+    "password": "test5"
+    }
+    '''
+    body = request.get_json()
+    # Get user login details
+    username = body.get("username")
+    password = body.get("password")
+
+    #User should be able to login with his username to access resources
+    try:
+        user = User.query.filter_by(username=username).first()
+        if not user and not check_password_hash(user.password, password):
+            return ({
+                "success": False,
+                "message": "Invalid username or password"
+            })
+        # Public_id was used so that user's details e.g username does not appear when
+        # the token is decoded.
+        token = jwt.encode(
+            {
+                'public_id': user.public_id, 'exp': datetime.now(timezone.utc) + timedelta(minutes=45)
+            }, app.config['SECRET_KEY'], "HS256"
+        )
+        return jsonify({'token' : token})
+    except Exception:
+        abort(400)
+
 
 @app.route('/alpha')
 @cross_origin()

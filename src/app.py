@@ -170,7 +170,7 @@ def login():
 @app.route('/alpha')
 @cross_origin()
 @token_required
-def alphabet():
+def alphabet(current_user):
 
     body = request.get_json()
     length = int(body.get("length"))
@@ -186,7 +186,7 @@ def alphabet():
 @app.route('/alphanumeric')
 @cross_origin()
 @token_required
-def alphanumeric():
+def alphanumeric(current_user):
 
     body = request.get_json()
     length = int(body.get("length"))
@@ -202,7 +202,7 @@ def alphanumeric():
 @app.route('/alphanumx')
 @cross_origin()
 @token_required
-def alphanumx():
+def alphanumx(current_user):
 
     body = request.get_json()
     length = int(body.get("length"))

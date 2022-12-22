@@ -93,12 +93,12 @@ def alphabet():
     body = request.get_json()
     length = int(body.get("length"))
 
-    password = generate(length, lower_char, upper_char)
+    password = generate_password(length, lower_char, upper_char)
     strength = check_password_strength(password)
     return jsonify({
         'success': True,
         'password': password,
-        'strength': strength
+        'strength score': strength
     })
 
 @app.route('/alphanumeric')
@@ -108,12 +108,12 @@ def alphanumeric():
     body = request.get_json()
     length = int(body.get("length"))
 
-    password = generate(length, upper_char, lower_char, numbers)
+    password = generate_password(length, upper_char, lower_char, numbers)
     strength = check_password_strength(password)
     return jsonify({
         'success': True,
         'password': password,
-        'strength': strength
+        'strength score': strength
     })
 
 @app.route('/alphanumx')
@@ -123,12 +123,12 @@ def alphanumx():
     body = request.get_json()
     length = int(body.get("length"))
     
-    password = generate(length, upper_char, lower_char, numbers, special_char)
+    password = generate_password(length, upper_char, lower_char, numbers, special_char)
     strength = check_password_strength(password)
     return jsonify({
         'success': True,
         'password': password,
-        'strength': strength
+        'strength score': strength
     })
 
 @app.errorhandler(400)

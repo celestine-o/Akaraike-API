@@ -260,3 +260,12 @@ def unprocessable(error):
         "error": 422,
         "message": "Unprocessable"
     }), 422
+
+@app.errorhandler(AuthError)
+@cross_origin()
+def authentication_error(auth_error):
+    return jsonify({
+        "success": False,
+        "error": auth_error.status_code,
+        "message": auth_error.error
+    }), auth_error.status_code

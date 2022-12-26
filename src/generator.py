@@ -25,6 +25,7 @@ def loop(length, char_string):
         
 def generate_password_basic(length, chars):
     password = ""
+    length = int(length)
     for _ in range(length):
         # Generate a random index between 0 and the length of chars
         index = random.randint(0, len(chars) - 1)
@@ -107,6 +108,8 @@ def generate_new_password(length, *args):
             (length / total_args) * 2 if char_len <= 5 else length / total_args
         )
         pw = generate_password_basic(len_char_type, arg)
+        password += pw
+        print(password)
     # Use generated string in variable pw to generate password
-    password = generate_password_basic(length, pw)
+    password = generate_password_basic(length, password)
     return password

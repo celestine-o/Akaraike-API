@@ -11,8 +11,10 @@ lower_char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 # String of lowercase characters
 upper_char = 'abcdefghijklmnopqrstuvwxyz'
 
+        
 def generate_password_basic(length, chars):
     password = ""
+    length = int(length)
     for _ in range(length):
         # Generate a random index between 0 and the length of chars
         index = random.randint(0, len(chars) - 1)
@@ -62,17 +64,11 @@ def generate_password(length, *args):
         len_char_type = (
             (length / total_args) * 2 if char_len <= 5 else length / total_args
         )
-        for _ in range(int(len_char_type)):
-            # Generate a random index between 0 and the length of arg
-            index = random.randint(0, len(arg) - 1)
-            # Retrieve a random character from arg using the generated index and
-            # append it to pw
-            pw += arg[index]
-    # Use generated string in variable pw to generate password
-    for _ in range(length):
-        # Generate a random index between 0 and the length of pw
-        index = random.randint(0, len(pw) -1)
-        # Retrieve a random character from pw using the generated index and
-        # append it to password
-        password += pw[index]
+        # random strings of length = len_char_type are generated from given
+        # character types
+        pw = generate_password_basic(len_char_type, arg)
+        # generated character stings are saved in variable password
+        password += pw
+    # Use generated string in variable password to generate password of given length
+    password = generate_password_basic(length, password)
     return password

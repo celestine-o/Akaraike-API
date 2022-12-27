@@ -12,7 +12,7 @@ Akaraike-API is an app designed to assist developers create passwords using diff
 - Developers who wish to contribute to this project should have Python3, pip and node installed on their local machines. Here is a link to download Python3 `www.python.org/downloads`.
 
 - Install *pipenv* by running ```pip install --user pipenv``` on your terminal or command line
-- When installed run ```pipenv install``` in the klerc folder to install dependencies.
+- When installed run ```pipenv install``` in the Akaraike folder to install dependencies.
 
 - To run the application run the following commands:
     ```
@@ -29,7 +29,7 @@ The application is run on `http://127.0.0.1:5000/`
 
 ### Error Handling
 
-Klerc app uses conventional HTTP response code to indicate success and failure of an API request, errors are returned as JSON objects in the format
+Akaraike-API uses conventional HTTP response code to indicate success and failure of an API request, errors are returned as JSON objects in the format
 
 {
     "success": False, 

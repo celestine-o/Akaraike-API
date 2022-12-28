@@ -215,6 +215,13 @@ def alphanumx(current_user):
         'strength score': strength
     })
 
+@app.route('/passwordstrength')
+@cross_origin()
+@token_required
+def checkpasswordstrength(current_user):
+    body = request.get_json()
+    password = body.get("password")
+
 @app.errorhandler(400)
 @cross_origin()
 def bad_request(error):

@@ -66,7 +66,7 @@ Example: `curl http://127.0.0.1:5000/`
 
   -Endpoint is used to create new users in the database.
   
-  -Body should contain a first_name(string), last_name(string), email(string), username(string) and password(string).
+  -Body should contain an email(string), username(string) and password(string).
   
   -Returns a success key of true and message
   

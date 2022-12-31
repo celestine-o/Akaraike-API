@@ -73,7 +73,7 @@ Example: `curl http://127.0.0.1:5000/`
   -Request arguments: None
   
   
-Example: `curl http://127.0.0.1:5000/register -X POST -H "Content-Type: application/json" -d '{"first_name": "Eiyzy","last_name": "Eusy","email": "test005@test.com","username": "Bee5","password": "test5"}'`
+Example: `curl http://127.0.0.1:5000/register -X POST -H "Content-Type: application/json" -d '{"email": "test005@test.com","username": "Bee5","password": "test5"}'`
 
 ```
 {
